@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Switch between git worktrees with ease.
+
+args=("$@")
+
+# show worktree list
+worktree_list() {
+	git worktree list
+}
+
+help_message(){
+	echo -e "wt lets you quickly switch between your git worktrees.\n"
+	echo "Usage:"
+	echo -e "\twt list: list out all the git worktrees."
+	echo -e "\twt help: shows this help message."
+	echo -e "\twt <worktree-name/search-term>: search for worktree names and change to that directory."
+}
+
+# If the first argument is "list", show worktree list,
+# if it is "help", then show the help message,
+# else get worktree path based on user input.
+if [ -z ${args[0]} ]; then
+	help_message
+elif [ ${args[0]} == "list" ]; then
+	worktree_list
+elif [ ${args[0]} == "help" ]; then
+	help_message
+else
+	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}')
+fi
+
+# Change worktree based on user argument.
+change_worktree() {
+	echo Changing to worktree at: $directory
+	cd $directory
+	exec $(echo $SHELL)
+}
+
+# If directory variable is not empty then change worktree
+if [ -z $directory ]
+then
+	:
+else
+	change_worktree
+fi
