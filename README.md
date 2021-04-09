@@ -4,6 +4,7 @@ Switch between git worktrees with ease. :zap:
 <img src = "https://i.imgur.com/RYuBJnE.gif" width="700" alt="demo of switching between git worktrees" />
 
 ## Installation
+Download the executable from the [Release section](https://github.com/yankeexe/git-worktree-switcher/releases).
 
 Make the script executable.
 
@@ -11,7 +12,7 @@ Make the script executable.
 $ chmod +x wt
 ```
 
-Copy the binary to any directory in your `$PATH`
+Copy the executable to any directory in your `$PATH`
 
 ```bash
 $ sudo cp wt /usr/local/bin
@@ -22,13 +23,8 @@ Switch between worktrees.
 You can do a text search to change to the worktree directory.
 
 ```bash
-$ wt <worktree-name/search-term>: search for worktree names and change directory.
+$ wt <worktree-name/search-term>
 ```
-
-> <details><summary><strong>Demo</strong></summary>
-> <img src = "https://i.imgur.com/RYuBJnE.gif" width="700" alt="demo of switching between git worktrees" />
-
-</details>
 
 List out all the worktrees.
 
