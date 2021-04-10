@@ -1,7 +1,7 @@
 # Git worktree switcher :octocat:
 Switch between git worktrees with ease. :zap:
 
-<img src = "https://i.imgur.com/RYuBJnE.gif" width="700" alt="demo of switching between git worktrees" />
+<img src = "https://i.imgur.com/nPdneDT.gif" width="600" alt="demo of switching between git worktrees" />
 
 ## Installation
 Download the executable from the [Release section](https://github.com/yankeexe/git-worktree-switcher/releases).
@@ -29,9 +29,11 @@ $ wt <worktree-name/search-term>
 List out all the worktrees.
 
 ```bash
-wt list: list out all the git worktrees.
+$ wt list
 ```
 
+Show help message
+
 ```bash
-wt help: show this help message.
+$ wt help
 ```
