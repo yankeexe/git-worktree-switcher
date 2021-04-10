@@ -26,6 +26,12 @@ You can do a text search to change to the worktree directory.
 $ wt <worktree-name/search-term>
 ```
 
+Go to root worktree directory
+
+```bash
+$ wt -
+```
+
 List out all the worktrees.
 
 ```bash

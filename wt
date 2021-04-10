@@ -17,8 +17,21 @@ help_message(){
 	echo -e "\twt <worktree-name/search-term>: search for worktree names and change to that directory."
 }
 
+goto_main_worktree() {
+	main_worktree=$(git worktree list | awk 'NR==1 {print $1}')
+
+	if [ -z $main_worktree ]; then
+		:
+	else
+		echo Changing to worktree at: $main_worktree
+		cd $main_worktree
+		exec $(echo $SHELL)
+	fi
+}
+
 # If the first argument is "list", show worktree list,
 # if it is "help", then show the help message,
+# if it is "-", go to the main working tree,
 # else get worktree path based on user input.
 if [ -z ${args[0]} ]; then
 	help_message
@@ -26,8 +39,10 @@ elif [ ${args[0]} == "list" ]; then
 	worktree_list
 elif [ ${args[0]} == "help" ]; then
 	help_message
+elif [ ${args[0]} == "-" ]; then
+	goto_main_worktree
 else
-	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}')
+	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
 fi
 
 # Change worktree based on user argument.
@@ -38,8 +53,7 @@ change_worktree() {
 }
 
 # If directory variable is not empty then change worktree
-if [ -z $directory ]
-then
+if [ -z $directory ]; then
 	:
 else
 	change_worktree
