@@ -3,6 +3,13 @@
 # Switch between git worktrees with ease.
 
 args=("$@")
+VERSION="0.0.3"
+TMP_PATH=$(mktemp)
+BINARY_PATH=$(which wt)
+JQ_URL="https://stedolan.github.io/jq/download"
+RELEASE_URL="https://github.com/yankeexe/git-worktree-switcher/releases/latest"
+RELEASE_API_URL="https://api.github.com/repos/yankeexe/git-worktree-switcher/releases/latest"
+
 
 # show worktree list
 worktree_list() {
@@ -12,9 +19,10 @@ worktree_list() {
 help_message(){
 	echo -e "wt lets you quickly switch between your git worktrees.\n"
 	echo "Usage:"
+	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
 	echo -e "\twt list: list out all the git worktrees."
+	echo -e "\twt update: update to the latest release of worktree switcher."
 	echo -e "\twt help: shows this help message."
-	echo -e "\twt <worktree-name/search-term>: search for worktree names and change to that directory."
 }
 
 goto_main_worktree() {
@@ -29,9 +37,45 @@ goto_main_worktree() {
 	fi
 }
 
+download_latest_update() {
+	download_url=$(curl -sL $RELEASE_API_URL | jq -r '.assets[].browser_download_url')
+
+	echo "Downloading latest version $fetched_tag_name"
+	curl -sL -o $TMP_PATH $download_url
+
+	echo "Updating to latest version..."
+	chmod +x $TMP_PATH
+	sudo mv $TMP_PATH $BINARY_PATH
+	rm -f $TMP_PATH
+
+	echo "You are using the latest version of worktree switcher: $fetched_tag_name"
+}
+
+check_release_version() {
+	fetched_tag_name=$(curl -sL $RELEASE_API_URL | jq -r '.tag_name')
+
+	if [ $fetched_tag_name == $VERSION ]; then
+		echo "You have the latest version of worktree switcher!"
+		echo "Version: $VERSION"
+	else
+		download_latest_update
+	fi
+}
+
+update() {
+	if [ -z $(command -v jq) ]; then
+		echo "jq is required for updating worktree switcher via this command."
+		echo -e "Install jq:\n$JQ_URL.\n"
+		echo -e "Or visit:\n$RELEASE_URL"
+	else
+		check_release_version
+	fi
+}
+
 # If the first argument is "list", show worktree list,
 # if it is "help", then show the help message,
 # if it is "-", go to the main working tree,
+# if it is "update", update to the lastest version,
 # else get worktree path based on user input.
 if [ -z ${args[0]} ]; then
 	help_message
@@ -41,6 +85,8 @@ elif [ ${args[0]} == "help" ]; then
 	help_message
 elif [ ${args[0]} == "-" ]; then
 	goto_main_worktree
+elif [ ${args[0]} == "update" ]; then
+	update
 else
 	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
 fi

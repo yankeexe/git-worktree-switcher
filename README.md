@@ -4,7 +4,7 @@ Switch between git worktrees with ease. :zap:
 <img src = "https://i.imgur.com/nPdneDT.gif" width="600" alt="demo of switching between git worktrees" />
 
 ## Installation
-Download the executable from the [Release section](https://github.com/yankeexe/git-worktree-switcher/releases).
+Download the script from the [Release section](https://github.com/yankeexe/git-worktree-switcher/releases).
 
 Make the script executable.
 
@@ -42,4 +42,10 @@ Show help message
 
 ```bash
 $ wt help
+```
+
+Update to the latest release
+
+```bash
+$ wt update
 ```
