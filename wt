@@ -21,6 +21,7 @@ help_message(){
 	echo "Usage:"
 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
 	echo -e "\twt list: list out all the git worktrees."
+	echo -e "\twt sync: sync all branches from remote."
 	echo -e "\twt update: update to the latest release of worktree switcher."
 	echo -e "\twt help: shows this help message."
 }
@@ -35,6 +36,16 @@ goto_main_worktree() {
 		cd $main_worktree
 		exec $(echo $SHELL)
 	fi
+}
+
+sync_all_branch() {
+	main_worktree=$(git worktree list | awk 'NR==1 {print $1}')
+	cd $main_worktree
+	for i in $(git remote -v | awk '{print $1}' | sort | uniq)
+	do
+		echo $i
+		git fetch $i '*:*'
+	done
 }
 
 download_latest_update() {
@@ -87,6 +98,8 @@ elif [ ${args[0]} == "-" ]; then
 	goto_main_worktree
 elif [ ${args[0]} == "update" ]; then
 	update
+elif [ ${args[0]} == "sync" ]; then
+	sync_all_branch
 else
 	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
 fi
