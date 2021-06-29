@@ -40,11 +40,16 @@ goto_main_worktree() {
 
 sync_all_branch() {
 	main_worktree=$(git worktree list | awk 'NR==1 {print $1}')
+	if [ -z ${args[1]} ]; then
+		branch=*
+	else
+		branch=${args[1]}
+	fi
 	cd $main_worktree
 	for i in $(git remote -v | awk '{print $1}' | sort | uniq)
 	do
-		echo $i
-		git fetch $i '*:*'
+		echo "sync remote $i"
+		git fetch $i ${branch}:${branch}
 	done
 }
 
