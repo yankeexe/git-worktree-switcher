@@ -1,0 +1,16 @@
+#compdef wt
+
+# AUTOCOMPLETION FOR ZSH
+
+list="$(wt list | awk '{ print $1; }' | tr "\n" " ")"
+declare -A opts
+
+setopt shwordsplit
+for item in $list
+do
+    base="$(basename ${item} | xargs)"
+    opts+=(["$base"]="$base")
+done
+unsetopt shwordsplit
+
+compadd -Qa opts

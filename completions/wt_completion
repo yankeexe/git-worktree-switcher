@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# AUTOCOMPLETION FOR BASH
+
 _wt() {
     local cur opts
     COMPREPLY=()

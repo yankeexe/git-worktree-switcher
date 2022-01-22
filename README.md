@@ -18,13 +18,31 @@ Copy the executable to any directory in your `$PATH`
 $ sudo cp wt /usr/local/bin
 ```
 
-### Tab Completion
-:warning: Only **bash** completion is available for now.
+### Tab Autocompletion :zap:
 
+**For Bash**
 ```bash
-sudo cp wt_completion /etc/bash_completion.d
+sudo cp completions/wt_completion /etc/bash_completion.d
 ```
 
+**For ZSH**
+> Note: completion file for zsh has `_` prefix
+
+
+Find paths where you can store your completion
+```bash
+print -rl -- $fpath
+```
+
+Copy completion script to one of that location and restart the shell.
+
+```bash
+sudo cp completions/_wt_completion <one-of-$fpath>
+
+exec zsh
+```
+---
+Tab autocompletion works for switching between your worktrees.
 ```bash
 wt <TAB> <TAB>
 
