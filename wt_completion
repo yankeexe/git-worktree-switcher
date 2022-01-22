@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+_wt() {
+    local cur opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    list="$(wt list | awk '{ print $1; }' | tr "\n" " ")"
+    opts=""
+
+    for item in $list
+    do
+        opts+="$(basename "$item") "
+    done
+
+    if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
+        local cur=${COMP_WORDS[COMP_CWORD]}
+        COMPREPLY=( $(compgen -W "${opts}" -- "$cur") )
+    fi
+}
+
+complete -F _wt wt

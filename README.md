@@ -18,6 +18,21 @@ Copy the executable to any directory in your `$PATH`
 $ sudo cp wt /usr/local/bin
 ```
 
+### Tab Completion
+:warning: Only **bash** completion is available for now.
+
+```bash
+sudo cp wt_completion /etc/bash_completion.d
+```
+
+```bash
+wt <TAB> <TAB>
+
+# OR
+
+wt <completion-characters> <TAB>
+```
+
 ## Usage
 Switch between worktrees.
 You can do a text search to change to the worktree directory.
