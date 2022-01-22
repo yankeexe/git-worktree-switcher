@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 # AUTOCOMPLETION FOR BASH
+# Reference: https://www.gnu.org/software/bash/manual/html_node/A-Programmable-Completion-Example.html
+
+# wt list: list all the available worktrees
+# | awk '{ print $1; }': grab the first column of the output
+# | tr "\n" " ": replace line break character with space to put the worktrees on single line
+# separated by space
 
 _wt() {
     local cur opts
@@ -14,10 +20,16 @@ _wt() {
         opts+="$(basename "$item") "
     done
 
+    # Only show suggestions for the root command (wt)
+    # Pass autocompletion suggestion as "words (-W)" to `compgen` separated by space
     if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
         local cur=${COMP_WORDS[COMP_CWORD]}
         COMPREPLY=( $(compgen -W "${opts}" -- "$cur") )
     fi
 }
 
+# complete
+#   -F: take function as completion provider
+#   _wt: name of the function
+#   wt: name of the command this completion is meant for
 complete -F _wt wt
