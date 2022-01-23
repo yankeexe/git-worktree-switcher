@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Switch between git worktrees with ease.
 
@@ -28,12 +29,12 @@ help_message(){
 goto_main_worktree() {
 	main_worktree=$(git worktree list | awk 'NR==1 {print $1}')
 
-	if [ -z $main_worktree ]; then
+	if [ -z "$main_worktree" ]; then
 		:
 	else
-		echo Changing to worktree at: $main_worktree
-		cd $main_worktree
-		exec $(echo $SHELL)
+		echo Changing to worktree at: "$main_worktree"
+		cd "$main_worktree"
+		exec $SHELL
 	fi
 }
 
@@ -41,12 +42,12 @@ download_latest_update() {
 	download_url=$(curl -sL $RELEASE_API_URL | jq -r '.assets[].browser_download_url')
 
 	echo "Downloading latest version $fetched_tag_name"
-	curl -sL -o $TMP_PATH $download_url
+	curl -sL -o "$TMP_PATH" "$download_url"
 
 	echo "Updating to latest version..."
-	chmod +x $TMP_PATH
-	sudo mv $TMP_PATH $BINARY_PATH
-	rm -f $TMP_PATH
+	chmod +x "$TMP_PATH"
+	sudo mv "$TMP_PATH" "$BINARY_PATH"
+	rm -f "$TMP_PATH"
 
 	echo "You are using the latest version of worktree switcher: $fetched_tag_name"
 }
@@ -54,7 +55,7 @@ download_latest_update() {
 check_release_version() {
 	fetched_tag_name=$(curl -sL $RELEASE_API_URL | jq -r '.tag_name')
 
-	if [ $fetched_tag_name == $VERSION ]; then
+	if [ "$fetched_tag_name" == $VERSION ]; then
 		echo "You have the latest version of worktree switcher!"
 		echo "Version: $VERSION"
 	else
@@ -63,7 +64,7 @@ check_release_version() {
 }
 
 update() {
-	if [ -z $(command -v jq) ]; then
+	if [ -z "$(command -v jq)" ]; then
 		echo "jq is required for updating worktree switcher via this command."
 		echo -e "Install jq:\n$JQ_URL.\n"
 		echo -e "Or visit:\n$RELEASE_URL"
@@ -77,15 +78,15 @@ update() {
 # if it is "-", go to the main working tree,
 # if it is "update", update to the lastest version,
 # else get worktree path based on user input.
-if [ -z ${args[0]} ]; then
+if [ -z "${args[0]}" ]; then
 	help_message
-elif [ ${args[0]} == "list" ]; then
+elif [ "${args[0]}" == "list" ]; then
 	worktree_list
-elif [ ${args[0]} == "help" ]; then
+elif [ "${args[0]}" == "help" ]; then
 	help_message
-elif [ ${args[0]} == "-" ]; then
+elif [ "${args[0]}" == "-" ]; then
 	goto_main_worktree
-elif [ ${args[0]} == "update" ]; then
+elif [ "${args[0]}" == "update" ]; then
 	update
 else
 	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
@@ -93,13 +94,13 @@ fi
 
 # Change worktree based on user argument.
 change_worktree() {
-	echo Changing to worktree at: $directory
-	cd $directory
-	exec $(echo $SHELL)
+	echo Changing to worktree at: "$directory"
+	cd "$directory"
+	exec $SHELL
 }
 
 # If directory variable is not empty then change worktree
-if [ -z $directory ]; then
+if [ -z "$directory" ]; then
 	:
 else
 	change_worktree
