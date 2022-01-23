@@ -17,7 +17,7 @@ declare -A opts
 setopt shwordsplit
 for item in $list
 do
-    base="$(basename ${item} | xargs)"
+    base="$(basename -- "$item")"
     opts+=(["$base"]="$base")
 done
 unsetopt shwordsplit
