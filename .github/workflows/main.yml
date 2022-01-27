@@ -27,4 +27,4 @@ jobs:
       - name: Run Shellcheck
         run: |
           ./shellcheck --version
-          ./shellcheck -e SC2148 wt completions/*
+          ./shellcheck -e SC2148 wt completions/_wt_completion completions/wt_completion

@@ -41,6 +41,11 @@ sudo cp completions/_wt_completion <one-of-$fpath>
 
 exec zsh
 ```
+
+**For Fish**
+```bash
+cp completions/wt.fish ~/.config/fish/completions
+```
 ---
 Tab autocompletion works for switching between your worktrees.
 ```bash
