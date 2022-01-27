@@ -4,7 +4,7 @@ set -e
 # Switch between git worktrees with ease.
 
 args=("$@")
-VERSION="0.0.3"
+VERSION="0.0.7"
 TMP_PATH=$(mktemp)
 BINARY_PATH=$(which wt)
 JQ_URL="https://stedolan.github.io/jq/download"
