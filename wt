@@ -11,13 +11,12 @@ JQ_URL="https://stedolan.github.io/jq/download"
 RELEASE_URL="https://github.com/yankeexe/git-worktree-switcher/releases/latest"
 RELEASE_API_URL="https://api.github.com/repos/yankeexe/git-worktree-switcher/releases/latest"
 
-
 # show worktree list
 worktree_list() {
 	git worktree list
 }
 
-help_message(){
+help_message() {
 	echo -e "wt lets you quickly switch between your git worktrees.\n"
 	echo "Usage:"
 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
@@ -73,24 +72,27 @@ update() {
 	fi
 }
 
-# If the first argument is "list", show worktree list,
-# if it is "help", then show the help message,
-# if it is "-", go to the main working tree,
-# if it is "update", update to the lastest version,
-# else get worktree path based on user input.
 if [ -z "${args[0]}" ]; then
 	help_message
-elif [ "${args[0]}" == "list" ]; then
-	worktree_list
-elif [ "${args[0]}" == "help" ]; then
-	help_message
-elif [ "${args[0]}" == "-" ]; then
-	goto_main_worktree
-elif [ "${args[0]}" == "update" ]; then
-	update
-else
-	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
 fi
+
+case "${args[0]}" in
+list)
+	worktree_list
+	;;
+update)
+	update
+	;;
+help)
+	help_message
+	;;
+-)
+	goto_main_worktree
+	;;
+*)
+	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
+	;;
+esac
 
 # Change worktree based on user argument.
 change_worktree() {
