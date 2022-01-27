@@ -13,4 +13,4 @@ for item in (string split " " "$list")
    set -a opts (basename -- "$item")
 end
 
-complete -c wt -f -a "$opts"
+complete -c wt -f -n '__fish_is_nth_token 1' -a "$opts"
