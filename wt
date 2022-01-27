@@ -75,6 +75,7 @@ update() {
 
 if [ -z "${args[0]}" ]; then
 	help_message
+	exit 0
 fi
 
 case "${args[0]}" in
