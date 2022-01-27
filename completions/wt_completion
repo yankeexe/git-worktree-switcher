@@ -15,17 +15,16 @@ _wt() {
     list="$(wt list | awk '{ print $1; }' | tr "\n" " ")"
     opts=""
 
-    for item in $list
-    do
+    for item in $list; do
         opts+="$(basename -- "$item") "
     done
 
     # Only show suggestions for the root command (wt)
     # Pass autocompletion suggestion as "words (-W)" to `compgen` separated by space
-    if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
+    if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]]; then
         local cur=${COMP_WORDS[COMP_CWORD]}
         # shellcheck disable=SC2207
-        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        COMPREPLY=($(compgen -W "$opts" -- "$cur"))
     fi
 }
 

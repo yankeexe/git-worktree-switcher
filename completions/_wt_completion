@@ -15,8 +15,7 @@ declare -A opts
 # Completion keywords are taken as keys of arrays and the possible matches are their values
 # shwordsplit: iterate over a string separated by space (like sh/bash)
 setopt shwordsplit
-for item in $list
-do
+for item in $list; do
     base="$(basename -- "$item")"
     opts+=(["$base"]="$base")
 done
