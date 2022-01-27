@@ -87,3 +87,9 @@ Update to the latest release
 ```bash
 $ wt update
 ```
+
+Show the CLI version
+
+```bash
+$ wt version
+```
