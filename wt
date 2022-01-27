@@ -39,7 +39,7 @@ goto_main_worktree() {
 }
 
 download_latest_update() {
-	download_url=$(curl -sL $RELEASE_API_URL | jq -r '.assets[].browser_download_url')
+	download_url=$(curl -sL $RELEASE_API_URL | jq -r '.assets[0].browser_download_url')
 
 	echo "Downloading latest version $fetched_tag_name"
 	curl -sL -o "$TMP_PATH" "$download_url"
