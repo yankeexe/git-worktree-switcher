@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Switch between git worktrees with ease.
+# Switch between git worktrees with speed.
 
 args=("$@")
 VERSION="0.0.8"
@@ -17,7 +17,7 @@ worktree_list() {
 }
 
 help_message() {
-	echo -e "wt lets you quickly switch between your git worktrees.\n"
+	echo -e "wt lets you switch between your git worktrees with speed.\n"
 	echo "Usage:"
 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
 	echo -e "\twt list: list out all the git worktrees."
