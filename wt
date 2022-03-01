@@ -16,6 +16,15 @@ worktree_list() {
 	git worktree list
 }
 
+# Parses out the directory from the worktree string
+get_tree_path() {
+	tree_arr=($@)
+	# Remove last 2 array elements to get path only
+	unset tree_arr[${#tree_arr[@]}-1] # Branch name
+	unset tree_arr[${#tree_arr[@]}-1] # HEAD commit ID
+	echo ${tree_arr[*]}
+}
+
 help_message() {
 	echo -e "wt lets you switch between your git worktrees with speed.\n"
 	echo "Usage:"
@@ -27,13 +36,14 @@ help_message() {
 }
 
 goto_main_worktree() {
-	main_worktree=$(git worktree list | awk 'NR==1 {print $1}')
+	main_worktree=$(git worktree list | awk -F "\t" 'NR==1 {print $1}')
+	directory=$(get_tree_path "$main_worktree")
 
-	if [ -z "$main_worktree" ]; then
+	if [ -z "$directory" ]; then
 		:
 	else
-		echo Changing to worktree at: "$main_worktree"
-		cd "$main_worktree"
+		echo Changing to main worktree at: "$directory"
+		cd "$directory"
 		exec $SHELL
 	fi
 }
@@ -95,7 +105,8 @@ version)
 	goto_main_worktree
 	;;
 *)
-	directory=$(git worktree list | awk '/'"${args[0]}"'/ {print $1}' | awk 'NR==1 {print $1}')
+	worktree=$(git worktree list | awk -F "\t" '/'"${args[0]}"'/ {print $1}' | awk -F "\t" 'NR==1 {print $1}')
+	directory=$(get_tree_path "$worktree")
 	;;
 esac
 
