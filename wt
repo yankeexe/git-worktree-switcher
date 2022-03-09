@@ -27,13 +27,13 @@ help_message() {
 }
 
 goto_main_worktree() {
-	directory=$(git worktree list --porcelain | awk '$1=="worktree" {print substr($0, 10); exit}') # Skips 'worktree ' at start of string
+	main_worktree=$(git worktree list --porcelain | awk '{print $0; exit}' | grep -oP '(?<=worktree ).*' )
 
-	if [ -z "$directory" ]; then
+	if [ -z "$main_worktree" ]; then
 		:
 	else
-		echo Changing to main worktree at: "$directory"
-		cd "$directory"
+		echo Changing to main worktree at: "$main_worktree"
+		cd "$main_worktree"
 		exec $SHELL
 	fi
 }
@@ -95,7 +95,7 @@ version)
 	goto_main_worktree
 	;;
 *)
-	directory=$(git worktree list --porcelain | awk '/'"${args[0]}"'/ {print; exit}' | awk '$1=="worktree" {print substr($0, 10); exit}') # Skips 'worktree ' at start of string
+    directory=$(git worktree list --porcelain | awk '/'"${args[0]}"'/ {print; exit}' | grep -oP '(?<=worktree ).*' )
 	;;
 esac
 
