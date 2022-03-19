@@ -4,12 +4,16 @@ set -e
 # Switch between git worktrees with speed.
 
 args=("$@")
-VERSION="0.0.9"
+VERSION="0.1.0"
 TMP_PATH=$(mktemp)
 BINARY_PATH=$(which wt)
 JQ_URL="https://stedolan.github.io/jq/download"
 RELEASE_URL="https://github.com/yankeexe/git-worktree-switcher/releases/latest"
 RELEASE_API_URL="https://api.github.com/repos/yankeexe/git-worktree-switcher/releases/latest"
+
+
+# Escape forward slash
+arg=$(echo "${args[0]}" | sed 's/\//\\\//g')
 
 # show worktree list
 worktree_list() {
@@ -27,7 +31,7 @@ help_message() {
 }
 
 goto_main_worktree() {
-	main_worktree=$(git worktree list --porcelain | awk '{print $0; exit}' | grep -oP '(?<=worktree ).*' )
+	main_worktree=$(git worktree list --porcelain | awk '{print $0; exit}' | grep -oP '(?<=worktree ).*')
 
 	if [ -z "$main_worktree" ]; then
 		:
@@ -95,7 +99,7 @@ version)
 	goto_main_worktree
 	;;
 *)
-    directory=$(git worktree list --porcelain | awk '/'"${args[0]}"'/ {print; exit}' | grep -oP '(?<=worktree ).*' )
+	directory=$(git worktree list --porcelain | awk '/'"$arg"'/ {print; exit}' | grep -oP '(?<=worktree ).*')
 	;;
 esac
 
