@@ -18,19 +18,6 @@ Copy the executable to any directory in your `$PATH`
 $ sudo cp wt /usr/local/bin
 ```
 
-## Note for Mac Users
-`git-work-tree switcher` relies on GNU grep, which is not avaiable on Mac.
-
-To use this tool:
-- install GNU grep
-   ```sh
-   brew install grep
-   ```
-- Add **gnubin** directory to your `PATH`
-    ```sh
-    export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
-    ```
-
 ## Tab Autocompletion :zap:
 
 **For Bash**
