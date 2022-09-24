@@ -31,7 +31,7 @@ help_message() {
 }
 
 goto_main_worktree() {
-	main_worktree=$(git worktree list --porcelain | awk '{print $0; exit}' | grep -E 'worktree ' | cut -d ' ' -f2-)
+	main_worktree=$(git worktree list --porcelain | grep -E 'worktree ' | awk '{print $0; exit}' | cut -d ' ' -f2-)
 
 	if [ -z "$main_worktree" ]; then
 		:
@@ -99,7 +99,7 @@ version)
 	goto_main_worktree
 	;;
 *)
-	directory=$(git worktree list --porcelain | awk '/'"$arg"'/ {print; exit}' | grep -E 'worktree ' | cut -d ' ' -f2-)
+	directory=$(git worktree list --porcelain | grep -E 'worktree ' | awk '/'"$arg"'/ {print; exit}' | cut -d ' ' -f2-)
 	;;
 esac
 
