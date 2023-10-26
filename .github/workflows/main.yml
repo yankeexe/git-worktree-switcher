@@ -8,14 +8,14 @@ on:
 
 name: "Shellcheck"
 env:
-  VERSION: v0.8.0
+  VERSION: v0.9.0
 
 jobs:
   shellcheck:
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install shellcheck
         run: |
           wget -q https://github.com/koalaman/shellcheck/releases/download/$VERSION/shellcheck-$VERSION.linux.x86_64.tar.xz \
