@@ -20,6 +20,11 @@ worktree_list() {
 	git worktree list
 }
 
+# create a new worktree
+worktree_add() {
+	git worktree add "$@"
+}
+
 help_message() {
 	echo -e "wt lets you switch between your git worktrees with speed.\n"
 	echo "Usage:"
@@ -83,6 +88,9 @@ if [ -z "${args[0]}" ]; then
 fi
 
 case "${args[0]}" in
+add)
+  worktree_add "${args[@]:1}"
+	;;
 list)
 	worktree_list
 	;;
