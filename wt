@@ -10,6 +10,7 @@ BINARY_PATH=$(which wt)
 JQ_URL="https://stedolan.github.io/jq/download"
 RELEASE_URL="https://github.com/yankeexe/git-worktree-switcher/releases/latest"
 RELEASE_API_URL="https://api.github.com/repos/yankeexe/git-worktree-switcher/releases/latest"
+CHANGE_DIRECTORY_PREFIX="changedir:"
 
 
 # Escape forward slash
@@ -27,6 +28,7 @@ help_message() {
 	echo -e "\twt list: list out all the git worktrees."
 	echo -e "\twt update: update to the latest release of worktree switcher."
 	echo -e "\twt version: show the CLI version."
+	echo -e "\twt init <shell>: print the init script for <shell>."
 	echo -e "\twt help: shows this help message."
 }
 
@@ -36,9 +38,7 @@ goto_main_worktree() {
 	if [ -z "$main_worktree" ]; then
 		:
 	else
-		echo Changing to main worktree at: "$main_worktree"
-		cd "$main_worktree"
-		exec $SHELL
+		directory=$main_worktree
 	fi
 }
 
@@ -77,6 +77,69 @@ update() {
 	fi
 }
 
+init_bash() {
+	cat <<EOF
+wt() {
+	if ! command -v wt &> /dev/null; then
+		echo "wt was not found in your \\\$PATH"
+		return 1
+	fi
+
+	result="\$(command wt "\$@")"
+	dest_path="\$(echo "\$result" | awk '/^$CHANGE_DIRECTORY_PREFIX.*/ {sub("$CHANGE_DIRECTORY_PREFIX", ""); print; exit}')"
+
+	if [[ -n "\$dest_path" ]]; then
+		cd "\$dest_path" || return
+	elif [[ -n \$result ]]; then
+		echo "\$result"
+	fi
+
+	return 0
+}
+EOF
+}
+
+init_fish() {
+	cat <<EOF
+function wt
+	if ! command -q wt
+		echo "wt was not found in your \\\$PATH"
+		return 1
+	end
+
+	set -l result "\$(command wt \$argv)"
+	set -l dest_path "\$(echo "\$result" | awk '/^$CHANGE_DIRECTORY_PREFIX.*/ {sub("$CHANGE_DIRECTORY_PREFIX", ""); print; exit}')"
+
+	if test -n "\$dest_path"
+		cd "\$dest_path"
+	else if test -n "\$result"
+		echo "\$result"
+	end
+end
+EOF
+}
+
+init() {
+	shell="${args[1]}"
+	if [[ -z $shell ]]; then
+		echo "Please supply a shell."
+		echo "    eg. wt init bash"
+		exit 1
+	fi
+	case "$shell" in
+	bash|zsh)
+		init_bash
+		;;
+	fish)
+		init_fish
+		;;
+	*)
+		echo "Unsupported shell: $shell"
+		exit 1
+		;;
+	esac
+}
+
 if [ -z "${args[0]}" ]; then
 	help_message
 	exit 0
@@ -95,6 +158,9 @@ help)
 version)
 	echo Version: $VERSION
 	;;
+init)
+	init
+	;;
 -)
 	goto_main_worktree
 	;;
@@ -103,16 +169,9 @@ version)
 	;;
 esac
 
-# Change worktree based on user argument.
-change_worktree() {
-	echo Changing to worktree at: "$directory"
-	cd "$directory"
-	exec $SHELL
-}
-
 # If directory variable is not empty then change worktree
 if [ -z "$directory" ]; then
 	:
 else
-	change_worktree
+	echo "$CHANGE_DIRECTORY_PREFIX$directory"
 fi
