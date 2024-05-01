@@ -3,22 +3,21 @@
 # AUTOCOMPLETION FOR ZSH
 # Reference: https://zsh.sourceforge.io/Doc/Release/Completion-Widgets.html
 
-# wt list: list all the available worktrees
-# | awk '{ print $1; }': grab the first column of the output
-# | tr "\n" " ": replace line break character with space to put the worktrees on single line
-# separated by space
-
-list="$(wt list | awk '{ print $1; }' | tr "\n" " ")"
+# Declare an associative array named `opts`
 declare -A opts
+
+# Split the worktree names into an array, line-by-line.
+list=("${(@f)$(wt names)}")
 
 # Create associative array with key same as its value
 # Completion keywords are taken as keys of arrays and the possible matches are their values
-# shwordsplit: iterate over a string separated by space (like sh/bash)
-setopt shwordsplit
 for item in $list; do
-    base="$(basename -- "$item")"
-    opts+=(["$base"]="$base")
+	# Escape every element's special characters
+	item=$(printf '%q' "$item")
+	opts+=(["$item"]="$item")
 done
-unsetopt shwordsplit
 
+# Add the keys of `opts` as completion options for the `wt` command.
+# `-Q` quotes the completion options.
+# `-a` specifies that the options are taken from an associative array.
 compadd -Qa opts

@@ -20,11 +20,20 @@ worktree_list() {
 	git worktree list
 }
 
+worktree_list_names() {
+	if git rev-parse --git-dir &> /dev/null; then
+		git worktree list --porcelain \
+			| awk '/^worktree / { sub("worktree ", ""); print; }' \
+			| xargs -I{} basename {}
+	fi
+}
+
 help_message() {
 	echo -e "wt lets you switch between your git worktrees with speed.\n"
 	echo "Usage:"
 	echo -e "\twt <worktree-name>: search for worktree names and change to that directory."
 	echo -e "\twt list: list out all the git worktrees."
+	echo -e "\twt names: list out only the git worktree names."
 	echo -e "\twt update: update to the latest release of worktree switcher."
 	echo -e "\twt version: show the CLI version."
 	echo -e "\twt help: shows this help message."
@@ -85,6 +94,9 @@ fi
 case "${args[0]}" in
 list)
 	worktree_list
+	;;
+names)
+	worktree_list_names
 	;;
 update)
 	update
