@@ -81,7 +81,7 @@ init_bash() {
 	cat <<EOF
 wt() {
 	if ! command -v wt &> /dev/null; then
-		echo "wt was not found in your \\\$PATH"
+		echo 'wt was not found in your \$PATH'
 		return 1
 	fi
 
@@ -103,7 +103,7 @@ init_fish() {
 	cat <<EOF
 function wt
 	if ! command -q wt
-		echo "wt was not found in your \\\$PATH"
+		echo 'wt was not found in your \$PATH'
 		return 1
 	end
 
