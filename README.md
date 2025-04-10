@@ -1,4 +1,4 @@
-# Git worktree switcher:zap:
+# Git worktree switcher :zap:
 Switch between git worktrees with speed. :zap:
 
 <img src = "https://i.imgur.com/nPdneDT.gif" width="600" alt="demo of switching between git worktrees" />
