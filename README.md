@@ -25,6 +25,11 @@ $ sudo cp wt /usr/local/bin
 sudo cp completions/wt_completion /etc/bash_completion.d
 ```
 
+Add this to the end of your `~/.bashrc`:
+```bash
+eval "$(command wt init bash)"
+```
+
 **For ZSH**
 > Note: completion file for zsh has `_` prefix
 
@@ -42,10 +47,21 @@ sudo cp completions/_wt_completion <one-of-$fpath>
 exec zsh
 ```
 
+Add this to the end of your `~/.zshrc`:
+```bash
+eval "$(command wt init zsh)"
+```
+
 **For Fish**
 ```bash
 cp completions/wt.fish ~/.config/fish/completions
 ```
+
+Add this to the end of your `~/.config/fish/config.fish`:
+```bash
+command wt init fish | source
+```
+
 ---
 Tab autocompletion works for switching between your worktrees.
 ```bash
