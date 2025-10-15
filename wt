@@ -31,7 +31,9 @@ done
 
 # show worktree list
 worktree_list() {
-	git worktree list
+	if git rev-parse --git-dir &> /dev/null; then
+		git worktree list
+	fi
 }
 
 help_message() {
